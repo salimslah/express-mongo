@@ -52,7 +52,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 const sendTokenResponse = (user, statusCode, res) => {
   // Create token
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: '1d',
+    expiresIn: process.env.JWT_EXPIRE,
   });
 
   res.status(statusCode).json({

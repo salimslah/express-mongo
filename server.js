@@ -11,6 +11,10 @@ const errorHandler = require('./middleware/error.middleware');
 dotenv.config();
 
 // Connect to database
+const compression = require('compression');
+const hpp = require('hpp');
+
+// Connect to database
 connectDB();
 
 const app = express();
@@ -26,8 +30,17 @@ if (process.env.NODE_ENV === 'development') {
 // Set security headers
 app.use(helmet());
 
+// Prevent http param pollution
+app.use(hpp());
+
+// Compress all responses
+app.use(compression());
+
 // Enable CORS
-app.use(cors());
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN || '*'
+};
+app.use(cors(corsOptions));
 
 // Rate limiting
 const limiter = rateLimit({
